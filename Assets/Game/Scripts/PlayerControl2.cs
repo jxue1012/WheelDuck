@@ -41,9 +41,10 @@ public class PlayerControl2 : MonoBehaviour
         rotationSpeed = data.PlayerRotationSpeed;
         BtnChangeSpeed = data.BtnChangeSpeed;
 
+        this.transform.position = Vector2.zero;
         this.gameObject.SetActive(true);
         CanMove = true;
-        this.transform.position = Vector2.zero;
+        animator.CrossFade("Idle", 0);
     }
 
     public void ReadyToChallenge()
@@ -56,6 +57,7 @@ public class PlayerControl2 : MonoBehaviour
     {
         CanMove = false;
         rb.velocity = Vector2.zero;
+        animator.CrossFade("Idle", 0);
     }
 
     public void AddForce(Vector2 force)
@@ -68,6 +70,7 @@ public class PlayerControl2 : MonoBehaviour
         float dist = Vector2.Distance(Vector2.zero, this.transform.position);
         if (dist > GameCenter.Instance.floorControl.radius)
         {
+            CanMove = false;
             this.gameObject.SetActive(false);
             GameCenter.Instance.GameOver();
         }

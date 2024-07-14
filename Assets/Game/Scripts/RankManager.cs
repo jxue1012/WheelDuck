@@ -18,24 +18,24 @@ public class RankManager : MonoBehaviour
     public void Init()
     {
         DataToUpdate = null;
-        UpdateRankData();
+        UpdateRankData(false);
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            UpdateRankData();
-        }
+    // private void Update()
+    // {
+    //     // if (Input.GetKeyDown(KeyCode.I))
+    //     // {
+    //     //     UpdateRankData();
+    //     // }
 
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            DataToUpdate = new();
-            DataToUpdate.Name = "Test Player";
-            DataToUpdate.Score = 10;
-            UpdateRankData();
-        }
-    }
+    //     // if (Input.GetKeyDown(KeyCode.O))
+    //     // {
+    //     //     DataToUpdate = new();
+    //     //     DataToUpdate.Name = "Test Player";
+    //     //     DataToUpdate.Score = 10;
+    //     //     UpdateRankData();
+    //     // }
+    // }
 
     // private void LoadRankData()
     // {
@@ -77,7 +77,7 @@ public class RankManager : MonoBehaviour
 
             GameCenter.Instance.uIManager.UpdateRankPage(data.playerDatas);
         }
-            
+
     }
 
     //----------- Update Data ---------------
@@ -89,12 +89,13 @@ public class RankManager : MonoBehaviour
         DataToUpdate.Name = GameCenter.Instance.PlayerName;
         DataToUpdate.Score = score;
 
-        UpdateRankData();
+        UpdateRankData(true);
     }
 
-    public void UpdateRankData()
+    public void UpdateRankData(bool checkSetData)
     {
-        if(GameCenter.Instance.TestModeOn)
+        Debug.Log("call update");
+        if (GameCenter.Instance.TestModeOn)
             return;
 
         try
@@ -102,14 +103,39 @@ public class RankManager : MonoBehaviour
             var ui = GameCenter.Instance.uIManager;
             ui.ShowRankLoadingStatus();
             string key = GameCenter.Instance.IsInfiniteMode ? "Infinite" : "Normal";
-            GetJSON(key, gameObject.name, "UpdateDataGet", "OnRequestFailed");
+            if (checkSetData)
+            {
+                GetJSON(key, gameObject.name, "UpdateDataGet", "OnRequestFailed");
+            }
+            else
+            {
+                GetJSON(key, gameObject.name, "UpdateRankPage", "OnRequestFailed");
+            }
         }
         catch (System.Exception e)
         {
             Debug.LogError(e);
+            OnRequestFailed(e.Message);
         }
     }
 
+    public void UpdateRankPage(string data)
+    {
+        string key = GameCenter.Instance.IsInfiniteMode ? "Infinite" : "Normal";
+        GameCenter.Instance.uIManager.ResetRankPage();
+        RankData rank = JsonUtility.FromJson<RankData>(data);
+        rank.OrderData();
+        rankData = rank;
+
+        if (rankData != null)
+        {
+            GameCenter.Instance.uIManager.UpdateRankPage(rankData.playerDatas);
+        }
+        else
+            GameCenter.Instance.uIManager.ResetRankPage();
+
+
+    }
     public void UpdateDataGet(string data)
     {
         string key = GameCenter.Instance.IsInfiniteMode ? "Infinite" : "Normal";

@@ -1570,7 +1570,7 @@ MonoBehaviour:
     m_Bits: 256
   GameStatus: 0
   gameData: {fileID: 11400000, guid: bc60d41ce4ecae14fbe97ff9b7d4cdc8, type: 2}
-  TestModeOn: 0
+  TestModeOn: 1
   Score: 0
   MaxTime: 60
   Timer: 0
