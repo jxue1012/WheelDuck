@@ -155,7 +155,7 @@ public class GameCenter : MonoBehaviour
         uIManager.UpdateGameMode();
         ResetTimer();
         rankManager.DataToUpdate = null;
-        rankManager.UpdateRankData();
+        rankManager.UpdateRankData(false);
     }
 
     //Score

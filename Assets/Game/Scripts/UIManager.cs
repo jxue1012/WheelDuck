@@ -255,14 +255,12 @@ public class UIManager : MonoBehaviour
 
     public void UpdateRankPage(List<PlayerData> dataList = null)
     {
+        ResetRankPage();
+
         if (dataList == null)
         {
-            ResetRankPage();
             return;
         }
-
-        LoadingStatus.SetActive(false);
-        FailStatus.SetActive(false);
 
         int dataLength = dataList.Count;
         for (int i = 0; i < playerDataInstances.Count; i++)
