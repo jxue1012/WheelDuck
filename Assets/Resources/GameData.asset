@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65de12d72ef0c014baa243b78c321149, type: 3}
+  m_Name: GameData
+  m_EditorClassIdentifier: 
+  DrumScore: 35
+  FoodScore: 200
+  MaxScore: 50
+  MiddleScore: 15
+  MinScore: 5
+  MinFloorSpeed: 0.25
+  MiddleFloorSpeed: 1
+  MaxFloorSpeed: 2.5
+  FloorSpeedInc: 0.25
+  DrumForce: 5
+  MinPlayerSpeed: 1
+  MaxPlayerSpeed: 3
+  MaxAcceleration: 2
+  PlayerRotationSpeed: 180
+  BtnChangeSpeed: 2
