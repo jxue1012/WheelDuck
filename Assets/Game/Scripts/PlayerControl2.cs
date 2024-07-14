@@ -44,6 +44,7 @@ public class PlayerControl2 : MonoBehaviour
         this.transform.position = Vector2.zero;
         this.gameObject.SetActive(true);
         CanMove = true;
+        animator.CrossFade("Idle", 0);
     }
 
     public void ReadyToChallenge()
@@ -56,6 +57,7 @@ public class PlayerControl2 : MonoBehaviour
     {
         CanMove = false;
         rb.velocity = Vector2.zero;
+        animator.CrossFade("Idle", 0);
     }
 
     public void AddForce(Vector2 force)
