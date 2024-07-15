@@ -29,17 +29,17 @@ public class FloorControl : MonoBehaviour
     private void Update()
     {
  
-        if (foodUpdateOn)
-        {
-            foodTimer += Time.deltaTime;
-            if (foodTimer >= foodDuration)
-            {
-                float newSpeed = Speed + speedInc;
-                SetFloorSpeed(newSpeed);
-                ShowFood();
-                foodTimer = 0;
-            }
-        }
+        //if (foodUpdateOn)
+        //{
+        //    foodTimer += Time.deltaTime;
+        //    if (foodTimer >= foodDuration)
+        //    {
+        //        float newSpeed = Speed + speedInc;
+        //        SetFloorSpeed(newSpeed);
+        //        ShowFood();
+        //        foodTimer = 0;
+        //    }
+        //}
 
     }
 
@@ -54,8 +54,8 @@ public class FloorControl : MonoBehaviour
         HideArrow();
         HideLight();
 
-        foodUpdateOn = false;
-        foodTimer = 0;
+        //foodUpdateOn = false;
+        //foodTimer = 0;
 
     }
 
@@ -67,8 +67,8 @@ public class FloorControl : MonoBehaviour
         ResetSpeed();
         ShowArrow();
 
-        foodUpdateOn = true;
-        foodTimer = 0;
+        //foodUpdateOn = true;
+        //foodTimer = 0;
         ShowFood();
     }
 
@@ -77,8 +77,8 @@ public class FloorControl : MonoBehaviour
         StopAllCoroutines();
         HideArrow();
         HideLight();
-        foodUpdateOn = false;
-        foodTimer = 0;
+        //foodUpdateOn = false;
+        //foodTimer = 0;
     }
 
     public void ChangeSpeed(float value)
@@ -149,6 +149,11 @@ public class FloorControl : MonoBehaviour
     {
         Speed = Mathf.Clamp(value, 0, GameCenter.Instance.gameData.MaxFloorSpeed);
     }
+    public void IncreaseFloorSpeed(float increment)
+    {
+        Speed += increment;
+        //Speed = Mathf.Clamp(Speed, 0, MaxSpeed);
+    }
 
     //Drum 
     [Header("Drum")]
@@ -196,9 +201,9 @@ public class FloorControl : MonoBehaviour
 
     public FoodControl FoodInstance;
     public float foodMinRadius, foodMaxRadius;
-    float foodTimer;
-    float foodDuration = 10f;
-    bool foodUpdateOn;
+    //float foodTimer;
+    //float foodDuration = 10f;
+    //bool foodUpdateOn;
 
     public void ShowFood()
     {

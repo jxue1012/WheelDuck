@@ -9,7 +9,10 @@ public class FoodControl : MonoBehaviour
             if (GameCenter.Instance.GameStatus == 1)
             {
                 GameCenter.Instance.AddScore(GameCenter.Instance.gameData.FoodScore);
+                GameCenter.Instance.floorControl.IncreaseFloorSpeed(GameCenter.Instance.gameData.FloorSpeedInc);
+                Debug.Log("Speed = " + GameCenter.Instance.floorControl.Speed);
                 Hide();
+                GameCenter.Instance.floorControl.ShowFood();
             }
             else
             {

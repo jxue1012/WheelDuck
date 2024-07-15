@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerControl2 : MonoBehaviour
 {
@@ -31,6 +32,12 @@ public class PlayerControl2 : MonoBehaviour
     private float leftValue, rightValue;
 
     public bool CanMove;
+
+    //Bar显示当前按键
+    public Image UIImage1;
+    public Image UIImage2;
+    public Image UIImage3;
+    public Image UIImage4;
 
     public void StartGame()
     {
@@ -149,7 +156,9 @@ public class PlayerControl2 : MonoBehaviour
 
     private float UpdateLeftBtn()
     {
-        if (Input.GetKeyDown(KeyCode.W))
+        float leftStickY = Input.GetAxis("LeftStickVertical"); // 左摇杆上下
+
+        if (Input.GetKeyDown(KeyCode.W) || leftStickY < 0)
         {
             if (leftBtnIndex != 10)
             {
@@ -159,8 +168,9 @@ public class PlayerControl2 : MonoBehaviour
             leftBtnIndex = 10;
         }
 
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.W) || leftStickY < 0)
         {
+            ShowImage(UIImage1);
             float time = leftBtnTime + Time.deltaTime * BtnChangeSpeed;
             time = Mathf.Clamp(time, 0, MaxBtnTime);
             leftBtnTime = time;
@@ -168,6 +178,7 @@ public class PlayerControl2 : MonoBehaviour
         }
         else
         {
+            HideImage(UIImage1);
             if (leftBtnIndex >= 1)
             {
                 float time = leftBtnTime - Time.deltaTime * BtnChangeSpeed;
@@ -176,7 +187,7 @@ public class PlayerControl2 : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.S))
+        if (Input.GetKeyDown(KeyCode.S) || leftStickY > 0)
         {
             if (leftBtnIndex != -10)
             {
@@ -186,8 +197,9 @@ public class PlayerControl2 : MonoBehaviour
             leftBtnIndex = -10;
         }
 
-        if (Input.GetKey(KeyCode.S))
+        if (Input.GetKey(KeyCode.S) || leftStickY > 0)
         {
+            ShowImage(UIImage2);
             float time = leftBtnTime + Time.deltaTime * BtnChangeSpeed;
             time = Mathf.Clamp(time, 0, MaxBtnTime);
             leftBtnTime = time;
@@ -195,6 +207,7 @@ public class PlayerControl2 : MonoBehaviour
         }
         else
         {
+            HideImage(UIImage2);
             if (leftBtnIndex <= 1)
             {
                 float time = leftBtnTime - Time.deltaTime * BtnChangeSpeed;
@@ -213,7 +226,9 @@ public class PlayerControl2 : MonoBehaviour
 
     private float UpdateRightBtn()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow))
+        float rightStickY = Input.GetAxis("RightStickVertical"); // 右摇杆上下
+
+        if (Input.GetKey(KeyCode.I) || rightStickY > 0)
         {
             if (rightBtnIndex != 10)
             {
@@ -223,14 +238,16 @@ public class PlayerControl2 : MonoBehaviour
             rightBtnIndex = 10;
         }
 
-        if (Input.GetKey(KeyCode.UpArrow))
+        if (Input.GetKey(KeyCode.I) || rightStickY > 0)
         {
+            ShowImage(UIImage3);
             float time = rightBtnTime + Time.deltaTime * BtnChangeSpeed;
             time = Mathf.Clamp(time, 0, MaxBtnTime);
             rightBtnTime = time;
         }
         else
         {
+            HideImage(UIImage3);
             if (rightBtnIndex >= 1)
             {
                 float time = rightBtnTime - Time.deltaTime * BtnChangeSpeed;
@@ -239,7 +256,7 @@ public class PlayerControl2 : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (Input.GetKey(KeyCode.K) || rightStickY < 0)
         {
             if (rightBtnIndex != -10)
             {
@@ -249,14 +266,16 @@ public class PlayerControl2 : MonoBehaviour
             rightBtnIndex = -10;
         }
 
-        if (Input.GetKey(KeyCode.DownArrow))
+        if (Input.GetKey(KeyCode.K) || rightStickY < 0)
         {
+            ShowImage(UIImage4);
             float time = rightBtnTime + Time.deltaTime * BtnChangeSpeed;
             time = Mathf.Clamp(time, 0, MaxBtnTime);
             rightBtnTime = time;
         }
         else
         {
+            HideImage(UIImage4);
             if (rightBtnIndex <= 1)
             {
                 float time = rightBtnTime - Time.deltaTime * BtnChangeSpeed;
@@ -286,7 +305,21 @@ public class PlayerControl2 : MonoBehaviour
         return y;
     }
 
+    void ShowImage(Image image)
+    {
+        if (image != null)
+        {
+            image.gameObject.SetActive(true);
+        }
+    }
 
+    void HideImage(Image image)
+    {
+        if (image != null)
+        {
+            image.gameObject.SetActive(false);
+        }
+    }
     #region ----------- Anim ------------------
 
     [Header("Anim")]

@@ -26,23 +26,27 @@ public class PlayerControl : MonoBehaviour
         playerInput.y = Input.GetAxis("Vertical");
         playerInput = Vector2.ClampMagnitude(playerInput, 1f);
 
-        if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.UpArrow))
+        // 读取手柄输入
+        float leftStickY = Input.GetAxis("Vertical");  // 左摇杆上下
+        float rightStickY = Input.GetAxis("Vertical"); // 右摇杆上下
+
+        if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.UpArrow) || leftStickY > 0 && rightStickY > 0)
         {
             // 角色向面朝方向移动
             moveDir = transform.up.normalized;
         }
-        else if (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.DownArrow))
+        else if (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.DownArrow) || leftStickY < 0 && rightStickY < 0)
         {
             // 角色朝面朝的反方向后退
             moveDir = -transform.up.normalized;
         }
-        else if (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.UpArrow))
+        else if (Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.UpArrow) || leftStickY < 0 && rightStickY > 0)
         {
             //逆时针旋转
             float rotationDirection = 1f;
             rb.rotation += rotationDirection * rotationSpeed * Time.deltaTime;
         }
-        else if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.DownArrow))
+        else if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.DownArrow) || leftStickY > 0 && rightStickY < 0)
         {
             //顺时针旋转
             float rotationDirection = -1f;
