@@ -7,6 +7,10 @@ using UnityEngine.SceneManagement;
 public class GameCenter : MonoBehaviour
 {
     private static GameCenter instance;
+    public AudioClip StartSound;
+    public AudioClip ReadySound;
+    public AudioClip EndSound;
+    public AudioClip ScoreSound;
 
     public static GameCenter Instance
     {
@@ -49,10 +53,10 @@ public class GameCenter : MonoBehaviour
         //     testUI.Switch();
         // }
 
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            ChangeGameMode();
-        }
+        //if (Input.GetKeyDown(KeyCode.Q))
+        //{
+        //    ChangeGameMode();
+        //}
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -114,6 +118,8 @@ public class GameCenter : MonoBehaviour
         ResetTimer();
         ResetScore();
         uIManager.StartGame();
+
+        PlaySound(StartSound);
     }
 
     public void ReadyToChallenge(bool isInfinite = false)
@@ -128,6 +134,8 @@ public class GameCenter : MonoBehaviour
         ResetTimer();
 
         uIManager.ReadyToChallenge(isInfinite);
+
+        PlaySound(ReadySound);
     }
 
     public void GameOver()
@@ -146,6 +154,8 @@ public class GameCenter : MonoBehaviour
             player.GameOver();
             uIManager.GameOver();
             rankManager.SetDataToUpdate(Score);
+
+            PlaySound(EndSound);
         }
     }
 
@@ -171,6 +181,8 @@ public class GameCenter : MonoBehaviour
     {
         Score += value;
         uIManager.UpdateScore();
+
+        PlaySound(ScoreSound);
     }
 
     //Timer
@@ -233,9 +245,13 @@ public class GameCenter : MonoBehaviour
         }
     }
 
-
-
-
+    private void PlaySound(AudioClip clip)
+    {
+        if (clip != null)
+        {
+            AudioSource.PlayClipAtPoint(clip, Camera.main.transform.position);
+        }
+    }
 }
 
 [System.Serializable]
