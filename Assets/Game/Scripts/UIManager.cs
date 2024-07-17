@@ -42,7 +42,7 @@ public class UIManager : MonoBehaviour
 
         HideReadyBtn();
         HidePlayerName();
-        
+
         inputPlayerName.interactable = false;
     }
 
@@ -56,7 +56,7 @@ public class UIManager : MonoBehaviour
         // else
         ShowEndPage();
         HidePlayerName();
-        
+
         inputPlayerName.interactable = false;
     }
 
@@ -139,7 +139,8 @@ public class UIManager : MonoBehaviour
         startValue = oldValue;
         endValue = GameCenter.Instance.Score;
 
-        DOTween.To(() => startValue, x => {
+        DOTween.To(() => startValue, x =>
+        {
             startValue = x;
             tScore.text = Mathf.Floor(startValue).ToString();
         }, endValue, duration);
@@ -164,8 +165,13 @@ public class UIManager : MonoBehaviour
     [Header("Timer")]
     public TextMeshProUGUI tTimer;
     public Transform TimerStartSpot, TimerActSpot;
+    private bool timeLastCountOn = false;
+    public Color HighlightColor;
+    //Sequence timerSeq;
+
     public void ShowTimer()
     {
+        tTimer.color = Color.white;
         tTimer.transform.position = TimerStartSpot.position;
         tTimer.gameObject.SetActive(true);
         tTimer.transform.localScale = Vector3.one * 2f;
@@ -175,16 +181,38 @@ public class UIManager : MonoBehaviour
         tTimer.transform.DOScale(1f, 1f).SetEase(Ease.InOutExpo);
         tTimer.DOFade(1f, 0.5f).SetEase(Ease.InOutExpo);
 
+        timeLastCountOn = false;
+
         UpdateTimer();
     }
 
     public void UpdateTimer()
     {
+        float time = GameCenter.Instance.Timer;
+        if (time <= 5f && timeLastCountOn == false)
+        {
+            // timerSeq = DOTween.Sequence();
+            // timerSeq.Append(tTimer.transform.DOScale(1.2f, 0.5f))
+            // .Join(tTimer.DOColor(HighlightColor, 0.3f))
+            // .Append(tTimer.transform.DOScale(1f, 0.5f))
+            // .AppendInterval(0.2f)
+            // .Append(tTimer.DOColor(Color.white, 0.3f))
+            // .SetEase(Ease.InCubic)
+            // .SetLoops(-1)
+            // .Play();
+            tTimer.transform.DOScale(1.3f, 0.5f).SetEase(Ease.InCubic).SetLoops(-1, LoopType.Yoyo);
+            tTimer.DOColor(HighlightColor, 0.5f).SetEase(Ease.InCubic).SetLoops(-1, LoopType.Yoyo);
+            timeLastCountOn = true;
+        }
         tTimer.text = GameCenter.Instance.Timer.ToString("F1") + "s";
     }
 
     public void HideTimer()
     {
+        // if (timerSeq != null)
+        //     timerSeq.Kill();
+        tTimer.DOKill();
+        tTimer.transform.DOKill();
         tTimer.gameObject.SetActive(false);
     }
 

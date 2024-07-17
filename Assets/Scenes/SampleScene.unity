@@ -15545,6 +15545,7 @@ MonoBehaviour:
   tTimer: {fileID: 2072723585}
   TimerStartSpot: {fileID: 1350771673}
   TimerActSpot: {fileID: 150532996}
+  HighlightColor: {r: 1, g: 0.90588236, b: 0, a: 1}
   EndPageRoot: {fileID: 1133361359}
   EndPage: {fileID: 119280188}
   tEndScore: {fileID: 1995858878}
