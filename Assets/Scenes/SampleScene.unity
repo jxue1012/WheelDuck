@@ -8823,7 +8823,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Dir: {x: 0, y: 0}
-  Duration: 3
+  Duration: 6
   CheckScoreDuration: 2
   radius: 4.89
   LightIn: {fileID: 153834020}
@@ -15545,7 +15545,7 @@ MonoBehaviour:
   tTimer: {fileID: 2072723585}
   TimerStartSpot: {fileID: 1350771673}
   TimerActSpot: {fileID: 150532996}
-  HighlightColor: {r: 1, g: 0.90588236, b: 0, a: 1}
+  HighlightColor: {r: 1, g: 0.105669916, b: 0, a: 1}
   EndPageRoot: {fileID: 1133361359}
   EndPage: {fileID: 119280188}
   tEndScore: {fileID: 1995858878}
