@@ -28,6 +28,8 @@ public class UIManager : MonoBehaviour
         HideTimer();
         HideEndPage();
         ShowPlayerName();
+
+        inputPlayerName.interactable = true;
     }
 
     public void ReadyToChallenge(bool isInfinite)
@@ -40,6 +42,8 @@ public class UIManager : MonoBehaviour
 
         HideReadyBtn();
         HidePlayerName();
+        
+        inputPlayerName.interactable = false;
     }
 
     public void GameOver()
@@ -52,6 +56,8 @@ public class UIManager : MonoBehaviour
         // else
         ShowEndPage();
         HidePlayerName();
+        
+        inputPlayerName.interactable = false;
     }
 
     #region ---------- Ready Btn ----------------
@@ -123,9 +129,21 @@ public class UIManager : MonoBehaviour
 
     [Header("Score")]
     public TextMeshProUGUI tScore;
+    public int startValue;
+    public int endValue;
+    public float duration = 0.5f;
 
-    public void UpdateScore()
+
+    public void UpdateScore(int oldValue)
     {
+        startValue = oldValue;
+        endValue = GameCenter.Instance.Score;
+
+        DOTween.To(() => startValue, x => {
+            startValue = x;
+            tScore.text = Mathf.Floor(startValue).ToString();
+        }, endValue, duration);
+
         tScore.text = GameCenter.Instance.Score.ToString();
     }
 
@@ -145,9 +163,18 @@ public class UIManager : MonoBehaviour
 
     [Header("Timer")]
     public TextMeshProUGUI tTimer;
+    public Transform TimerStartSpot, TimerActSpot;
     public void ShowTimer()
     {
+        tTimer.transform.position = TimerStartSpot.position;
         tTimer.gameObject.SetActive(true);
+        tTimer.transform.localScale = Vector3.one * 2f;
+        tTimer.alpha = 0.5f;
+
+        tTimer.transform.DOMove(TimerActSpot.position, 1f).SetEase(Ease.InOutExpo);
+        tTimer.transform.DOScale(1f, 1f).SetEase(Ease.InOutExpo);
+        tTimer.DOFade(1f, 0.5f).SetEase(Ease.InOutExpo);
+
         UpdateTimer();
     }
 

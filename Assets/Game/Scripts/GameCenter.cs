@@ -53,10 +53,11 @@ public class GameCenter : MonoBehaviour
         //     testUI.Switch();
         // }
 
-        //if (Input.GetKeyDown(KeyCode.Q))
-        //{
-        //    ChangeGameMode();
-        //}
+        // if (Input.GetKeyDown(KeyCode.Q))
+        // {
+        //    //ChangeGameMode();
+        //    AddScore(15);
+        // }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -74,6 +75,7 @@ public class GameCenter : MonoBehaviour
     public UIManager uIManager;
 
     public RankManager rankManager;
+
 
     public LayerMask FloorLM;
     public int GameStatus;
@@ -170,17 +172,22 @@ public class GameCenter : MonoBehaviour
 
     //Score
     public int Score;
+    public GameObject AddScoreEffectPrefab;
 
     public void ResetScore()
     {
         Score = 0;
-        uIManager.UpdateScore();
+        uIManager.UpdateScore(0);
     }
 
     public void AddScore(int value)
     {
+        int oldValue = Score;
+        var effect = GameObject.Instantiate(AddScoreEffectPrefab).GetComponent<EffectAddScore>();
+        effect.Show(value);
+
         Score += value;
-        uIManager.UpdateScore();
+        uIManager.UpdateScore(oldValue);
 
         PlaySound(ScoreSound);
     }
@@ -216,7 +223,7 @@ public class GameCenter : MonoBehaviour
         }
         else
         {
-            PlayerName = "Player_?";
+            PlayerName = "Fresh Duck";
         }
     }
 

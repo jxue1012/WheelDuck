@@ -111,15 +111,16 @@ public class PlayerControl2 : MonoBehaviour
                 //逆时针旋转
                 float rotationDirection = 1f;
                 rb.rotation += rotationDirection * rotationSpeed * Time.deltaTime;
+                PlayAnim(leftAnim);
             }
             else if (leftBtnIndex > 9 && rightBtnIndex < -9)
             {
                 //顺时针旋转
                 float rotationDirection = -1f;
                 rb.rotation += rotationDirection * rotationSpeed * Time.deltaTime;
+                PlayAnim(rightAnim);
             }
 
-            PlayAnim(idleAnim);
         }
         else
         {
@@ -328,6 +329,8 @@ public class PlayerControl2 : MonoBehaviour
     public string idleAnim = "Idle";
     public string forwardAnim = "Forward";
     public string backwardAnim = "Backward";
+    public string leftAnim = "Left";
+    public string rightAnim = "Right";
 
     public void PlayAnim(string anim)
     {
