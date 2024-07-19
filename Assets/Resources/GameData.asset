@@ -17,10 +17,10 @@ MonoBehaviour:
   MaxScore: 50
   MiddleScore: 15
   MinScore: 5
-  MinFloorSpeed: 0.5
+  MinFloorSpeed: 1
   MiddleFloorSpeed: 1
   MaxFloorSpeed: 2.5
-  FloorSpeedInc: 0.15
+  FloorSpeedInc: 0.2
   FloorInfiniteSpeedInc: 0.1
   DrumForce: 5
   MinPlayerSpeed: 1

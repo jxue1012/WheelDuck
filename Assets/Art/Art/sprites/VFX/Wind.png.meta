@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 71d5a7b972c944249b204672fb886826
+guid: 171ca8a61ec77bf42a234db50e986d04
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4578591244471777430
-    second: Wind_0
+      213: 8605956544606621573
+    second: wind_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Wind_0
+      name: wind_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1537
-        height: 1369
+        width: 13
+        height: 563
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 698347a7a7c6a8f30800000000000000
-      internalID: 4578591244471777430
+      spriteID: 58fc9b981ef7e6770800000000000000
+      internalID: 8605956544606621573
       vertices: []
       indices: 
       edges: []
@@ -159,7 +159,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Wind_0: 4578591244471777430
+      wind_0: 8605956544606621573
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

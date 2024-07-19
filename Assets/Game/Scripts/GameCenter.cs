@@ -65,6 +65,10 @@ public class GameCenter : MonoBehaviour
             {
                 ReadyToChallenge();
             }
+            if (GameStatus == 2)
+            {
+                Restart();
+            }
         }
     }
 
