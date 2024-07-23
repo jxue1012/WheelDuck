@@ -4,6 +4,8 @@ public class FoodControl : MonoBehaviour
 {
     public GameObject eatPrefab;
     public AudioClip eatSound;
+    public ParticleSystem windParticleSystem;
+    public ParticleSystem stoneParticleSystem;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
@@ -18,6 +20,9 @@ public class FoodControl : MonoBehaviour
                 Debug.Log("Speed = " + GameCenter.Instance.floorControl.Speed);
                 Hide();
                 GameCenter.Instance.floorControl.ShowFood();
+
+                IncreaseWindRateOverTime(5);
+                IncreaseStoneStartSpeed(5);
             }
             else
             {
@@ -58,6 +63,24 @@ public class FoodControl : MonoBehaviour
         if (eatSound != null)
         {
             AudioSource.PlayClipAtPoint(eatSound, position);
+        }
+    }
+
+    private void IncreaseWindRateOverTime(float amount)
+    {
+        if (windParticleSystem != null)
+        {
+            var emission = windParticleSystem.emission;
+            emission.rateOverTime = new ParticleSystem.MinMaxCurve(emission.rateOverTime.constant + amount);
+        }
+    }
+
+    private void IncreaseStoneStartSpeed(float amount)
+    {
+        if (stoneParticleSystem != null)
+        {
+            var mainModule = stoneParticleSystem.main;
+            mainModule.startSpeed = new ParticleSystem.MinMaxCurve(mainModule.startSpeed.constant + amount);
         }
     }
 }

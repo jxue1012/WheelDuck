@@ -59,7 +59,7 @@ public class GameCenter : MonoBehaviour
         //    AddScore(15);
         // }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Fire1"))
         {
             if (GameStatus == 0)
             {
@@ -87,6 +87,9 @@ public class GameCenter : MonoBehaviour
 
     public bool IsInfiniteMode { get; private set; }
     public bool TestModeOn;
+
+    public GameObject windParticleSystem;
+    public GameObject stoneParticleSystem;
 
     private void Start()
     {
@@ -142,6 +145,8 @@ public class GameCenter : MonoBehaviour
         uIManager.ReadyToChallenge(isInfinite);
 
         PlaySound(ReadySound);
+        windParticleSystem.SetActive(true);
+        stoneParticleSystem.SetActive(true);
     }
 
     public void GameOver()
@@ -162,6 +167,11 @@ public class GameCenter : MonoBehaviour
             rankManager.SetDataToUpdate(Score);
 
             PlaySound(EndSound);
+
+            windParticleSystem.SetActive(false);
+            stoneParticleSystem.SetActive(false);
+
+            floorControl.ResetSpeed();
         }
     }
 

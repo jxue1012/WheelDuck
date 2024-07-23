@@ -20,7 +20,7 @@ MonoBehaviour:
   MinFloorSpeed: 1
   MiddleFloorSpeed: 1
   MaxFloorSpeed: 2.5
-  FloorSpeedInc: 0.2
+  FloorSpeedInc: 0.15
   FloorInfiniteSpeedInc: 0.1
   DrumForce: 5
   MinPlayerSpeed: 1

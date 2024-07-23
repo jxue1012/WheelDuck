@@ -15,6 +15,26 @@ public class FloorControl : MonoBehaviour
 
     public float radius = 1;
 
+    public ParticleSystem windParticleSystem;
+    public ParticleSystem stoneParticleSystem;
+    public GameObject stonePrefab;
+
+    private float initialWindRateOverTime;
+    private float initialStoneStartSpeed;
+
+    private void Start()
+    {
+        // 存储初始值
+        if (windParticleSystem != null)
+        {
+            initialWindRateOverTime = windParticleSystem.emission.rateOverTime.constant;
+        }
+        if (stoneParticleSystem != null)
+        {
+            initialStoneStartSpeed = stoneParticleSystem.main.startSpeed.constant;
+        }
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
@@ -79,6 +99,9 @@ public class FloorControl : MonoBehaviour
         HideLight();
         //foodUpdateOn = false;
         //foodTimer = 0;
+        ResetSpeed();
+        ResetWindRate();
+        ResetStoneSpeed();
     }
 
     public void ChangeSpeed(float value)
@@ -155,6 +178,24 @@ public class FloorControl : MonoBehaviour
         //Speed = Mathf.Clamp(Speed, 0, MaxSpeed);
     }
 
+    public void ResetWindRate()
+    {
+        if (windParticleSystem != null)
+        {
+            var emission = windParticleSystem.emission;
+            emission.rateOverTime = new ParticleSystem.MinMaxCurve(initialWindRateOverTime);
+        }
+    }
+
+    public void ResetStoneSpeed()
+    {
+        if (stoneParticleSystem != null)
+        {
+            var mainModule = stoneParticleSystem.main;
+            mainModule.startSpeed = new ParticleSystem.MinMaxCurve(initialStoneStartSpeed);
+        }
+    }
+
     //Drum 
     [Header("Drum")]
     public GameObject DrumContainer;
@@ -195,6 +236,17 @@ public class FloorControl : MonoBehaviour
 
         // 将箭头进行旋转，使其指向目标方向
         Arrow.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+
+        if (windParticleSystem != null)
+        {
+            var mainModule = windParticleSystem.main;
+            mainModule.startRotation = -Mathf.Deg2Rad * angle;  // 将角度转换为弧度
+        }
+
+        if (stonePrefab != null)
+        {
+            stonePrefab.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+        }
     }
 
     #region -------------- Food -----------------
