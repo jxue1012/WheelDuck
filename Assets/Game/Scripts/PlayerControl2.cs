@@ -32,12 +32,19 @@ public class PlayerControl2 : MonoBehaviour
     private float leftValue, rightValue;
 
     public bool CanMove;
+    public GameObject dieAnimationPrefab;
 
     //Bar显示当前按键
     public Image UIImage1;
     public Image UIImage2;
     public Image UIImage3;
     public Image UIImage4;
+
+    //player显示当前按键
+    public Image l1;
+    public Image l2;
+    public Image l3;
+    public Image l4;
 
     public void StartGame()
     {
@@ -79,7 +86,16 @@ public class PlayerControl2 : MonoBehaviour
         {
             CanMove = false;
             this.gameObject.SetActive(false);
+            SpawnDieAnimation();
             GameCenter.Instance.GameOver();
+        }
+    }
+
+    private void SpawnDieAnimation()
+    {
+        if (dieAnimationPrefab != null)
+        {
+            Instantiate(dieAnimationPrefab, this.transform.position, Quaternion.identity);
         }
     }
 
@@ -172,6 +188,7 @@ public class PlayerControl2 : MonoBehaviour
         if (Input.GetKey(KeyCode.W) || leftStickY < 0)
         {
             ShowImage(UIImage1);
+            ShowImage(l1);
             float time = leftBtnTime + Time.deltaTime * BtnChangeSpeed;
             time = Mathf.Clamp(time, 0, MaxBtnTime);
             leftBtnTime = time;
@@ -180,6 +197,7 @@ public class PlayerControl2 : MonoBehaviour
         else
         {
             HideImage(UIImage1);
+            HideImage(l1);
             if (leftBtnIndex >= 1)
             {
                 float time = leftBtnTime - Time.deltaTime * BtnChangeSpeed;
@@ -201,6 +219,7 @@ public class PlayerControl2 : MonoBehaviour
         if (Input.GetKey(KeyCode.S) || leftStickY > 0)
         {
             ShowImage(UIImage2);
+            ShowImage(l2);
             float time = leftBtnTime + Time.deltaTime * BtnChangeSpeed;
             time = Mathf.Clamp(time, 0, MaxBtnTime);
             leftBtnTime = time;
@@ -209,6 +228,7 @@ public class PlayerControl2 : MonoBehaviour
         else
         {
             HideImage(UIImage2);
+            HideImage(l2);
             if (leftBtnIndex <= 1)
             {
                 float time = leftBtnTime - Time.deltaTime * BtnChangeSpeed;
@@ -242,6 +262,7 @@ public class PlayerControl2 : MonoBehaviour
         if (Input.GetKey(KeyCode.I) || rightStickY > 0)
         {
             ShowImage(UIImage3);
+            ShowImage(l3);
             float time = rightBtnTime + Time.deltaTime * BtnChangeSpeed;
             time = Mathf.Clamp(time, 0, MaxBtnTime);
             rightBtnTime = time;
@@ -249,6 +270,7 @@ public class PlayerControl2 : MonoBehaviour
         else
         {
             HideImage(UIImage3);
+            HideImage(l3);
             if (rightBtnIndex >= 1)
             {
                 float time = rightBtnTime - Time.deltaTime * BtnChangeSpeed;
@@ -270,6 +292,7 @@ public class PlayerControl2 : MonoBehaviour
         if (Input.GetKey(KeyCode.K) || rightStickY < 0)
         {
             ShowImage(UIImage4);
+            ShowImage(l4);
             float time = rightBtnTime + Time.deltaTime * BtnChangeSpeed;
             time = Mathf.Clamp(time, 0, MaxBtnTime);
             rightBtnTime = time;
@@ -277,6 +300,7 @@ public class PlayerControl2 : MonoBehaviour
         else
         {
             HideImage(UIImage4);
+            HideImage(l4);
             if (rightBtnIndex <= 1)
             {
                 float time = rightBtnTime - Time.deltaTime * BtnChangeSpeed;
@@ -331,6 +355,7 @@ public class PlayerControl2 : MonoBehaviour
     public string backwardAnim = "Backward";
     public string leftAnim = "Left";
     public string rightAnim = "Right";
+    public string die = "Die";
 
     public void PlayAnim(string anim)
     {

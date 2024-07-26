@@ -64,12 +64,12 @@ public class UIManager : MonoBehaviour
 
     [Header("Ready Btn")]
     public GameObject ReadyBtn;
-    public TextMeshProUGUI tReadyBtn;
+    public Image tReadyBtn;
 
     public void ShowReadyBtn()
     {
         ReadyBtn.SetActive(true);
-        tReadyBtn.alpha = 0.75f;
+        tReadyBtn.color = new Color(tReadyBtn.color.r, tReadyBtn.color.g, tReadyBtn.color.b, 0.75f);
         ReadyBtn.transform.DOScale(1.05f, 1f).SetLoops(-1, LoopType.Yoyo);
         tReadyBtn.DOFade(1f, 1f).SetLoops(-1, LoopType.Yoyo);
     }
@@ -235,9 +235,13 @@ public class UIManager : MonoBehaviour
 
     public void HideEndPage()
     {
-
+        Debug.Log("Hiding End Page...");
         EndPage.transform.localScale = Vector3.one;
-        EndPage.transform.DOScale(0f, 1f).SetEase(Ease.InOutExpo).OnComplete(() => EndPageRoot.SetActive(false));
+        EndPage.transform.DOScale(0f, 1f).SetEase(Ease.InOutExpo).OnComplete(() =>
+        {
+            EndPageRoot.SetActive(false);
+            Debug.Log("End Page hidden.");
+        });
     }
 
     #endregion
