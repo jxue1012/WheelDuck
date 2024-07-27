@@ -164,6 +164,7 @@ public class GameCenter : MonoBehaviour
             floorControl.GameOver();
             player.GameOver();
             uIManager.GameOver();
+            Debug.Log("xx");
             rankManager.SetDataToUpdate(Score);
 
             PlaySound(EndSound);
