@@ -94,7 +94,7 @@ public class RankManager : MonoBehaviour
 
     public void UpdateRankData(bool checkSetData)
     {
-        Debug.Log("call update");
+        Debug.Log("call update / " + checkSetData);
         if (GameCenter.Instance.TestModeOn)
             return;
 
@@ -148,8 +148,8 @@ public class RankManager : MonoBehaviour
         {
             if (rankData.playerDatas.Count < 10)
             {
-                rankData.playerDatas.Add(DataToUpdate);
-                rankData.OrderData();
+                rankData.Add(DataToUpdate);
+                //rankData.OrderData();
                 string json = JsonUtility.ToJson(rankData);
                 SetJSON(key, json, gameObject.name, "UpdateDataSet", "OnRequestFailed");
             }
@@ -160,7 +160,7 @@ public class RankManager : MonoBehaviour
                 {
                     AddData(DataToUpdate);
                     //更新
-                    rankData.playerDatas.Add(DataToUpdate);
+                    //rankData.playerDatas.Add(DataToUpdate);
                     string json = JsonUtility.ToJson(rankData);
                     SetJSON(key, json, gameObject.name, "UpdateDataSet", "OnRequestFailed");
                 }
@@ -227,7 +227,7 @@ public class RankManager : MonoBehaviour
     {
         if (data == null) return;
 
-        rankData.playerDatas.Add(data);
+        rankData.Add(data);
         rankData.playerDatas = rankData.playerDatas.OrderByDescending(x => x.Score).ToList();
         while (rankData.playerDatas.Count > 10)
         {
@@ -236,11 +236,7 @@ public class RankManager : MonoBehaviour
         }
     }
 
-
-
 }
-
-
 
 
 [System.Serializable]
@@ -251,6 +247,20 @@ public class RankData
     public void OrderData()
     {
         playerDatas = playerDatas.OrderByDescending(x => x.Score).ToList();
+    }
+
+    public void Add(PlayerData newData)
+    {
+        // foreach (var d in playerDatas)
+        // {
+        //     if (d.Name == newData.Name && d.Score == newData.Score)
+        //     {
+        //         return;
+        //     }
+        // }
+
+        playerDatas.Add(newData);
+        OrderData();
     }
 
 }
