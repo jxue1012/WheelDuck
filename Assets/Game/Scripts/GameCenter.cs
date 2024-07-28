@@ -59,7 +59,7 @@ public class GameCenter : MonoBehaviour
         //    AddScore(15);
         // }
 
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Fire1"))
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.JoystickButton0))
         {
             if (GameStatus == 0)
             {
