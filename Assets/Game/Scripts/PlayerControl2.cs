@@ -19,7 +19,7 @@ public class PlayerControl2 : MonoBehaviour
     float maxAcceleration = 2f;
 
     private Vector2 worldDir;
-    private float rotationSpeed = 180f; // 旋转速度，角度每秒
+    private float rotationSpeed = 90f; // 旋转速度，角度每秒
 
     private float MaxBtnTime = 2f;
     public float BtnChangeSpeed = 5f;
@@ -107,6 +107,38 @@ public class PlayerControl2 : MonoBehaviour
         rightValue = UpdateRightBtn();
 
         int btnStatus = leftBtnIndex + rightBtnIndex;
+        ////////////////////////////
+        bool isWAndIPressed = Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.I);
+        bool isSAndKPressed = Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.K);
+
+        if (!isWAndIPressed && !isSAndKPressed)
+        {
+            if (Input.GetKey(KeyCode.W))
+            {
+                float rotationDirection = -1f;
+                rb.rotation += rotationDirection * rotationSpeed * Time.deltaTime;
+                //PlayAnim(righthandAnim);
+            }
+            else if (Input.GetKey(KeyCode.S))
+            {
+                float rotationDirection = 1f;
+                rb.rotation += rotationDirection * rotationSpeed * Time.deltaTime;
+                //PlayAnim(lefthandAnim);
+            }
+            else if (Input.GetKey(KeyCode.I))
+            {
+                float rotationDirection = 1f;
+                rb.rotation += rotationDirection * rotationSpeed * Time.deltaTime;
+                //PlayAnim(lefthandAnim);
+            }
+            else if (Input.GetKey(KeyCode.K))
+            {
+                float rotationDirection = -1f;
+                rb.rotation += rotationDirection * rotationSpeed * Time.deltaTime;
+                //PlayAnim(righthandAnim);
+            }
+        }
+        //////////////////////////
 
         if (btnStatus > 19)
         {
@@ -170,6 +202,7 @@ public class PlayerControl2 : MonoBehaviour
     {
         worldDir = dir;
     }
+
 
     private float UpdateLeftBtn()
     {
@@ -356,6 +389,8 @@ public class PlayerControl2 : MonoBehaviour
     public string leftAnim = "Left";
     public string rightAnim = "Right";
     public string die = "Die";
+    public string lefthandAnim = "LeftHand";
+    public string righthandAnim = "RightHand";
 
     public void PlayAnim(string anim)
     {
