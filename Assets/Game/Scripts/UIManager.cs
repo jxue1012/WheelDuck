@@ -15,14 +15,25 @@ public class UIManager : MonoBehaviour
         InitPlayerName();
 
         UpdateGameMode();
+
+        HideEndPage();
+        InitHUD();
     }
 
     public void StartGame()
     {
+        HideEndPage();
         ShowGameTitle();
+    }
+
+    private void GameStartReady()
+    {
+        ShowHUD();
         HidePlayerInputPage();
         ShowRankPage();
         HideScore();
+
+        ShowTutorial();
 
         ShowReadyBtn();
         HideTimer();
@@ -30,15 +41,19 @@ public class UIManager : MonoBehaviour
         ShowPlayerName();
 
         inputPlayerName.interactable = true;
+        GameCenter.Instance.GameStartReady = true;
     }
 
     public void ReadyToChallenge(bool isInfinite)
     {
-        HideGameTitle();
+
+        //HideGameTitle();
         HidePlayerInputPage();
         HideRankPage();
         ShowTimer();
         ShowScore();
+
+        HideTutorial();
 
         HideReadyBtn();
         HidePlayerName();
@@ -235,13 +250,12 @@ public class UIManager : MonoBehaviour
 
     public void HideEndPage()
     {
-        Debug.Log("Hiding End Page...");
         EndPage.transform.localScale = Vector3.one;
-        EndPage.transform.DOScale(0f, 1f).SetEase(Ease.InOutExpo).OnComplete(() =>
-        {
-            EndPageRoot.SetActive(false);
-            Debug.Log("End Page hidden.");
-        });
+        EndPageRoot.SetActive(false);
+        // EndPage.transform.DOScale(0f, 1f).SetEase(Ease.InOutExpo).OnComplete(() =>
+        // {
+        //     Debug.Log("End Page hidden.");
+        // });
     }
 
     #endregion
@@ -354,19 +368,52 @@ public class UIManager : MonoBehaviour
     #region ---------- Game Title -------------
 
     [Header("Game Title")]
-    public GameObject GameTitle;
+    public CanvasGroup GameTitle;
     public Transform gameTitleHideSpot, gameTitleShowSpot;
 
     public void ShowGameTitle()
     {
-        GameTitle.transform.position = gameTitleHideSpot.position;
-        GameTitle.transform.DOMove(gameTitleShowSpot.position, 1f).SetEase(Ease.InOutExpo);
+        GameTitle.transform.position = gameTitleShowSpot.position;
+        GameTitle.alpha = 0;
+        var seq = DOTween.Sequence();
+        seq.Append(GameTitle.DOFade(1f, 0.5f))
+        .AppendInterval(0.5f)
+        .Append(GameTitle.transform.DOMove(gameTitleHideSpot.position, 0.5f).SetEase(Ease.InOutExpo))
+        .InsertCallback(1f, () =>
+        {
+            GameStartReady();
+        })
+        .Play();
+        //GameTitle.transform.DOMove(gameTitleShowSpot.position, 1f).SetEase(Ease.InOutExpo);
     }
 
     public void HideGameTitle()
     {
         GameTitle.transform.position = gameTitleShowSpot.position;
         GameTitle.transform.DOMove(gameTitleHideSpot.position, 1f).SetEase(Ease.InOutExpo);
+    }
+
+    #endregion
+
+    #region ---------- HUD -------------
+
+    [Header("HUD")]
+    public CanvasGroup HUD;
+
+    private void InitHUD()
+    {
+        HUD.alpha = 0;
+    }
+
+    public void ShowHUD()
+    {
+        HUD.alpha = 0;
+        HUD.DOFade(1f, 1f);
+    }
+
+    public void HideHUD()
+    {
+        HUD.DOFade(0f, 1f);
     }
 
     #endregion
@@ -409,6 +456,67 @@ public class UIManager : MonoBehaviour
         bool isInfinite = GameCenter.Instance.IsInfiniteMode;
         tGameMode.text = isInfinite ? "Infinite\n Mode" : "Normal\n Mode";
     }
+
+    #endregion
+
+
+    #region ----------- Tutorial -------------
+
+    [Header("Tutorial")]
+    public GameObject TutorialPage;
+    public Transform TutorialShowSpot, TutorialHideSpot;
+
+    public GameObject[] TutorialCheckMarks;
+    public bool[] TutorialCheckFlags;
+    public bool TutorialOn = false;
+    public int LeafEatCount;
+
+    public void ShowTutorial()
+    {
+        TutorialOn = true;
+        ResetTutorial();
+        //TutorialPage.SetActive(true);
+        TutorialPage.transform.position = TutorialHideSpot.position;
+        TutorialPage.transform.DOMove(TutorialShowSpot.position, 1f).SetEase(Ease.InOutExpo);
+    }
+
+    public void HideTutorial()
+    {
+        TutorialOn = false;
+        //TutorialPage.SetActive(false);
+        TutorialPage.transform.position = TutorialShowSpot.position;
+        TutorialPage.transform.DOMove(TutorialHideSpot.position, 1f).SetEase(Ease.InOutExpo);
+    }
+
+    private void ResetTutorial()
+    {
+        LeafEatCount = 0;
+        for (int i = 0; i < TutorialCheckMarks.Length; i++)
+        {
+            TutorialCheckMarks[i].SetActive(false);
+            TutorialCheckFlags[i] = false;
+        }
+    }
+
+    public void SetTutorialCheckMark(int index, bool isOn)
+    {
+        if (TutorialOn == false) return;
+
+        TutorialCheckMarks[index].SetActive(isOn);
+        TutorialCheckFlags[index] = isOn;
+    }
+
+    public void AddLeafEatCount()
+    {
+        if (TutorialOn == false) return;
+
+        LeafEatCount++;
+        if (LeafEatCount >= 3)
+        {
+            SetTutorialCheckMark(5, true);
+        }
+    }
+
 
     #endregion
 

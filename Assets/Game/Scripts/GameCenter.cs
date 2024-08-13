@@ -12,6 +12,8 @@ public class GameCenter : MonoBehaviour
     public AudioClip EndSound;
     public AudioClip ScoreSound;
 
+    public bool GameStartReady;
+
     public static GameCenter Instance
     {
         get
@@ -24,6 +26,7 @@ public class GameCenter : MonoBehaviour
     {
         instance = this;
         testUI.gameObject.SetActive(false);
+        GameStartReady = false;
     }
 
     private void Update()
@@ -59,7 +62,7 @@ public class GameCenter : MonoBehaviour
         //    AddScore(15);
         // }
 
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.JoystickButton0))
+        if (GameStartReady && Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.JoystickButton0))
         {
             if (GameStatus == 0)
             {
@@ -113,6 +116,7 @@ public class GameCenter : MonoBehaviour
 
     public void Restart()
     {
+        GameStartReady = false;
         StartGame();
     }
 
@@ -164,7 +168,7 @@ public class GameCenter : MonoBehaviour
             floorControl.GameOver();
             player.GameOver();
             uIManager.GameOver();
-            Debug.Log("xx");
+
             rankManager.SetDataToUpdate(Score);
 
             PlaySound(EndSound);

@@ -26,6 +26,7 @@ public class DrumInstance : MonoBehaviour
                 Sprite.DOScale(1f, 0.25f).SetEase(Ease.InOutElastic);
             });
 
+            GameCenter.Instance.uIManager.SetTutorialCheckMark(4, true);
             InstantiateHitPrefab(collisionPosition);
             PlayHitSound(collisionPosition);
         }

@@ -94,7 +94,6 @@ public class RankManager : MonoBehaviour
 
     public void UpdateRankData(bool checkSetData)
     {
-        Debug.Log("call update / " + checkSetData);
         if (GameCenter.Instance.TestModeOn)
             return;
 

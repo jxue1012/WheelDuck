@@ -140,17 +140,21 @@ public class PlayerControl2 : MonoBehaviour
         }
         //////////////////////////
 
+        var ui = GameCenter.Instance.uIManager;
+
         if (btnStatus > 19)
         {
             // 角色向面朝方向移动
             moveDir = transform.up.normalized;
             PlayAnim(forwardAnim);
+            ui.SetTutorialCheckMark(0, true);
         }
         else if (btnStatus < -19)
         {
             // 角色朝面朝的反方向后退
             moveDir = -transform.up.normalized;
             PlayAnim(backwardAnim);
+            ui.SetTutorialCheckMark(1, true);
         }
         else if (btnStatus == 0)
         {
@@ -160,6 +164,7 @@ public class PlayerControl2 : MonoBehaviour
                 float rotationDirection = 1f;
                 rb.rotation += rotationDirection * rotationSpeed * Time.deltaTime;
                 PlayAnim(leftAnim);
+                ui.SetTutorialCheckMark(2, true);
             }
             else if (leftBtnIndex > 9 && rightBtnIndex < -9)
             {
@@ -167,6 +172,7 @@ public class PlayerControl2 : MonoBehaviour
                 float rotationDirection = -1f;
                 rb.rotation += rotationDirection * rotationSpeed * Time.deltaTime;
                 PlayAnim(rightAnim);
+                ui.SetTutorialCheckMark(3, true);
             }
 
         }

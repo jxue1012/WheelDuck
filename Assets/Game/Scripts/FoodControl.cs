@@ -28,7 +28,8 @@ public class FoodControl : MonoBehaviour
             {
                 GameCenter.Instance.floorControl.ShowFood();
             }
-
+            
+            GameCenter.Instance.uIManager.AddLeafEatCount();
             InstantiateEatPrefab(collisionPosition);
             PlayEatSound(collisionPosition);
         }
