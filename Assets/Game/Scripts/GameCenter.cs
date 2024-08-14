@@ -104,7 +104,7 @@ public class GameCenter : MonoBehaviour
 
         rankManager.Init();
 
-        StartGame();
+        StartGame(false);
     }
 
     public void SetWorldDir(Vector2 dir)
@@ -117,10 +117,10 @@ public class GameCenter : MonoBehaviour
     public void Restart()
     {
         GameStartReady = false;
-        StartGame();
+        StartGame(true);
     }
 
-    public void StartGame()
+    public void StartGame(bool skipTitle)
     {
         Score = 0;
         GameStatus = 0;
@@ -130,7 +130,7 @@ public class GameCenter : MonoBehaviour
         floorControl.StartGame();
         ResetTimer();
         ResetScore();
-        uIManager.StartGame();
+        uIManager.StartGame(skipTitle);
 
         PlaySound(StartSound);
     }

@@ -20,10 +20,16 @@ public class UIManager : MonoBehaviour
         InitHUD();
     }
 
-    public void StartGame()
+    public void StartGame(bool skipTitle)
     {
         HideEndPage();
-        ShowGameTitle();
+        if (skipTitle)
+        {
+            HideGameTitle();
+            GameStartReady();
+        }
+        else
+            ShowGameTitle();
     }
 
     private void GameStartReady()
@@ -373,6 +379,7 @@ public class UIManager : MonoBehaviour
 
     public void ShowGameTitle()
     {
+        GameTitle.gameObject.SetActive(true);
         GameTitle.transform.position = gameTitleShowSpot.position;
         GameTitle.alpha = 0;
         var seq = DOTween.Sequence();
@@ -389,8 +396,8 @@ public class UIManager : MonoBehaviour
 
     public void HideGameTitle()
     {
-        GameTitle.transform.position = gameTitleShowSpot.position;
-        GameTitle.transform.DOMove(gameTitleHideSpot.position, 1f).SetEase(Ease.InOutExpo);
+        GameTitle.DOKill();
+        GameTitle.gameObject.SetActive(false);
     }
 
     #endregion
