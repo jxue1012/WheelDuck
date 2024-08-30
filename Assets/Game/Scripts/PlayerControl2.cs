@@ -113,25 +113,28 @@ public class PlayerControl2 : MonoBehaviour
 
         if (!isWAndIPressed && !isSAndKPressed)
         {
-            if (Input.GetKey(KeyCode.W))
+            float leftStickY = Input.GetAxis("LeftStickVertical");
+            float rightStickY = Input.GetAxis("RightStickVertical");
+
+            if (Input.GetKey(KeyCode.W) || leftStickY < 0)
             {
                 float rotationDirection = -1f;
                 rb.rotation += rotationDirection * rotationSpeed * Time.deltaTime;
                 //PlayAnim(righthandAnim);
             }
-            else if (Input.GetKey(KeyCode.S))
+            else if (Input.GetKey(KeyCode.S) || leftStickY > 0)
             {
                 float rotationDirection = 1f;
                 rb.rotation += rotationDirection * rotationSpeed * Time.deltaTime;
                 //PlayAnim(lefthandAnim);
             }
-            else if (Input.GetKey(KeyCode.I))
+            else if (Input.GetKey(KeyCode.I) || rightStickY > 0)
             {
                 float rotationDirection = 1f;
                 rb.rotation += rotationDirection * rotationSpeed * Time.deltaTime;
                 //PlayAnim(lefthandAnim);
             }
-            else if (Input.GetKey(KeyCode.K))
+            else if (Input.GetKey(KeyCode.K) || rightStickY < 0)
             {
                 float rotationDirection = -1f;
                 rb.rotation += rotationDirection * rotationSpeed * Time.deltaTime;
