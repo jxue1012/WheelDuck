@@ -254,6 +254,11 @@ public class GameCenter : MonoBehaviour
             PlayerName = LimitStringLength(name, 15);
             PlayerPrefs.SetString("PlayerName", name);
         }
+        else
+        {
+            PlayerName = "Fresh Duck";
+            PlayerPrefs.SetString("PlayerName", "Fresh Duck");
+        }
 
         uIManager.UpdatePlayerName();
 
