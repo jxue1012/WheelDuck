@@ -26,5 +26,5 @@ MonoBehaviour:
   MinPlayerSpeed: 1
   MaxPlayerSpeed: 3
   MaxAcceleration: 2
-  PlayerRotationSpeed: 180
+  PlayerRotationSpeed: 90
   BtnChangeSpeed: 2

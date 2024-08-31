@@ -106,16 +106,35 @@ public class PlayerControl2 : MonoBehaviour
         leftValue = UpdateLeftBtn();
         rightValue = UpdateRightBtn();
 
+        float leftStickY = Input.GetAxis("LeftStickVertical");
+        float rightStickY = Input.GetAxis("RightStickVertical");
+
+        if (leftStickY < 0) // 左摇杆上推
+        {
+            leftBtnIndex = 10;
+        }
+        else if (leftStickY > 0) // 左摇杆下推
+        {
+            leftBtnIndex = -10;
+        }
+
+        if (rightStickY > 0) // 右摇杆上推
+        {
+            rightBtnIndex = 10;
+        }
+        else if (rightStickY < 0) // 右摇杆下推
+        {
+            rightBtnIndex = -10;
+        }
+
         int btnStatus = leftBtnIndex + rightBtnIndex;
         ////////////////////////////
-        bool isWAndIPressed = Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.I);
-        bool isSAndKPressed = Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.K);
+        bool isWAndIPressed = Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.I) || leftStickY < 0 && rightStickY > 0;
+        bool isSAndKPressed = Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.K) || leftStickY > 0 && rightStickY < 0;
+
 
         if (!isWAndIPressed && !isSAndKPressed)
         {
-            float leftStickY = Input.GetAxis("LeftStickVertical");
-            float rightStickY = Input.GetAxis("RightStickVertical");
-
             if (Input.GetKey(KeyCode.W) || leftStickY < 0)
             {
                 float rotationDirection = -1f;
