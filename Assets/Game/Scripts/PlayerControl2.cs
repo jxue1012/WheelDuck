@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using ChocDino.PartyIO;
 
 public class PlayerControl2 : MonoBehaviour
 {
@@ -106,74 +107,30 @@ public class PlayerControl2 : MonoBehaviour
         leftValue = UpdateLeftBtn();
         rightValue = UpdateRightBtn();
 
-        float leftStickY = Input.GetAxis("LeftStickVertical");
-        float rightStickY = Input.GetAxis("RightStickVertical");
-
-        if (leftStickY < 0) // 左摇杆上推
-        {
-            leftBtnIndex = 10;
-        }
-        else if (leftStickY > 0) // 左摇杆下推
-        {
-            leftBtnIndex = -10;
-        }
-
-        if (rightStickY > 0) // 右摇杆上推
-        {
-            rightBtnIndex = 10;
-        }
-        else if (rightStickY < 0) // 右摇杆下推
-        {
-            rightBtnIndex = -10;
-        }
-
         int btnStatus = leftBtnIndex + rightBtnIndex;
-        ////////////////////////////
-        bool isWAndIPressed = Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.I) || leftStickY < 0 && rightStickY > 0;
-        bool isSAndKPressed = Input.GetKey(KeyCode.S) && Input.GetKey(KeyCode.K) || leftStickY > 0 && rightStickY < 0;
 
-
-        if (!isWAndIPressed && !isSAndKPressed)
+        if (!(leftBtnIndex == 10 && rightBtnIndex == 10) && !(leftBtnIndex == -10 && rightBtnIndex == -10))
         {
-            if (Input.GetKey(KeyCode.W) || leftStickY < 0)
-            {
-                float rotationDirection = -1f;
-                rb.rotation += rotationDirection * rotationSpeed * Time.deltaTime;
-                //PlayAnim(righthandAnim);
-            }
-            else if (Input.GetKey(KeyCode.S) || leftStickY > 0)
-            {
-                float rotationDirection = 1f;
-                rb.rotation += rotationDirection * rotationSpeed * Time.deltaTime;
-                //PlayAnim(lefthandAnim);
-            }
-            else if (Input.GetKey(KeyCode.I) || rightStickY > 0)
-            {
-                float rotationDirection = 1f;
-                rb.rotation += rotationDirection * rotationSpeed * Time.deltaTime;
-                //PlayAnim(lefthandAnim);
-            }
-            else if (Input.GetKey(KeyCode.K) || rightStickY < 0)
-            {
-                float rotationDirection = -1f;
-                rb.rotation += rotationDirection * rotationSpeed * Time.deltaTime;
-                //PlayAnim(righthandAnim);
-            }
+            if (leftBtnIndex == 10)
+                rb.rotation += -1f * rotationSpeed * Time.deltaTime;
+            else if (leftBtnIndex == -10)
+                rb.rotation += 1f * rotationSpeed * Time.deltaTime;
+            else if (rightBtnIndex == 10)
+                rb.rotation += 1f * rotationSpeed * Time.deltaTime;
+            else if (rightBtnIndex == -10)
+                rb.rotation += -1f * rotationSpeed * Time.deltaTime;
         }
-        //////////////////////////
 
         var ui = GameCenter.Instance.uIManager;
 
         if (btnStatus > 19)
         {
-            // 角色向面朝方向移动
             moveDir = transform.up.normalized;
             PlayAnim(forwardAnim);
             ui.SetTutorialCheckMark(0, true);
         }
         else if (btnStatus < -19)
         {
-            // 角色朝面朝的反方向后退
             moveDir = -transform.up.normalized;
             PlayAnim(backwardAnim);
             ui.SetTutorialCheckMark(1, true);
@@ -182,21 +139,16 @@ public class PlayerControl2 : MonoBehaviour
         {
             if (leftBtnIndex < -9 && rightBtnIndex > 9)
             {
-                //逆时针旋转
-                float rotationDirection = 1f;
-                rb.rotation += rotationDirection * rotationSpeed * Time.deltaTime;
+                rb.rotation += 1f * rotationSpeed * Time.deltaTime;
                 PlayAnim(leftAnim);
                 ui.SetTutorialCheckMark(2, true);
             }
             else if (leftBtnIndex > 9 && rightBtnIndex < -9)
             {
-                //顺时针旋转
-                float rotationDirection = -1f;
-                rb.rotation += rotationDirection * rotationSpeed * Time.deltaTime;
+                rb.rotation += -1f * rotationSpeed * Time.deltaTime;
                 PlayAnim(rightAnim);
                 ui.SetTutorialCheckMark(3, true);
             }
-
         }
         else
         {
@@ -206,9 +158,7 @@ public class PlayerControl2 : MonoBehaviour
 
         float value = leftValue + rightValue;
         playerMoveSpeed = MapValue(value);
-
-        desiredVelocity =
-            moveDir * playerMoveSpeed + worldDir * GameCenter.Instance.floorControl.Speed;
+        desiredVelocity = moveDir * playerMoveSpeed + worldDir * GameCenter.Instance.floorControl.Speed;
 
         CheckDie();
     }
@@ -219,193 +169,126 @@ public class PlayerControl2 : MonoBehaviour
 
         velocity = rb.velocity;
         float maxSpeedChange = maxAcceleration * Time.deltaTime;
-        velocity.x =
-            Mathf.MoveTowards(velocity.x, desiredVelocity.x, maxSpeedChange);
-        velocity.y =
-            Mathf.MoveTowards(velocity.y, desiredVelocity.y, maxSpeedChange);
+        velocity.x = Mathf.MoveTowards(velocity.x, desiredVelocity.x, maxSpeedChange);
+        velocity.y = Mathf.MoveTowards(velocity.y, desiredVelocity.y, maxSpeedChange);
         rb.velocity = velocity;
     }
 
-    public void SetWorldDir(Vector2 dir)
-    {
-        worldDir = dir;
-    }
+    public void SetWorldDir(Vector2 dir) => worldDir = dir;
 
+    private float GetMouseYDirection(int mouseId)
+    {
+        var mouseList = MouseManager.Instance.All;
+        if (mouseId >= mouseList.Count) return 0f;
+        var mouse = mouseList[mouseId];
+        if (mouse.ConnectionState != MouseConnectionState.Connected) return 0f;
+        return mouse.PositionDelta.y;
+    }
 
     private float UpdateLeftBtn()
     {
-        float leftStickY = Input.GetAxis("LeftStickVertical"); // 左摇杆上下
+        float leftStickY = Input.GetAxis("LeftStickVertical");
+        float mouse1Y = GetMouseYDirection(0);
 
-        if (Input.GetKeyDown(KeyCode.W) || leftStickY < 0)
+        if (Input.GetKeyDown(KeyCode.W) || leftStickY < 0 || mouse1Y > 1f)
         {
-            if (leftBtnIndex != 10)
-            {
-                leftBtnTime = 0;
-            }
-
+            if (leftBtnIndex != 10) leftBtnTime = 0;
             leftBtnIndex = 10;
         }
 
-        if (Input.GetKey(KeyCode.W) || leftStickY < 0)
+        if (Input.GetKey(KeyCode.W) || leftStickY < 0 || mouse1Y > 1f)
         {
-            ShowImage(UIImage1);
-            ShowImage(l1);
-            float time = leftBtnTime + Time.deltaTime * BtnChangeSpeed;
-            time = Mathf.Clamp(time, 0, MaxBtnTime);
-            leftBtnTime = time;
+            ShowImage(UIImage1); ShowImage(l1);
+            leftBtnTime = Mathf.Clamp(leftBtnTime + Time.deltaTime * BtnChangeSpeed, 0, MaxBtnTime);
             leftBtnIndex = 10;
         }
         else
         {
-            HideImage(UIImage1);
-            HideImage(l1);
+            HideImage(UIImage1); HideImage(l1);
             if (leftBtnIndex >= 1)
-            {
-                float time = leftBtnTime - Time.deltaTime * BtnChangeSpeed;
-                time = Mathf.Clamp(time, 0, MaxBtnTime);
-                leftBtnTime = time;
-            }
+                leftBtnTime = Mathf.Clamp(leftBtnTime - Time.deltaTime * BtnChangeSpeed, 0, MaxBtnTime);
         }
 
-        if (Input.GetKeyDown(KeyCode.S) || leftStickY > 0)
+        if (Input.GetKeyDown(KeyCode.S) || leftStickY > 0 || mouse1Y < -1f)
         {
-            if (leftBtnIndex != -10)
-            {
-                leftBtnTime = 0;
-            }
-
+            if (leftBtnIndex != -10) leftBtnTime = 0;
             leftBtnIndex = -10;
         }
 
-        if (Input.GetKey(KeyCode.S) || leftStickY > 0)
+        if (Input.GetKey(KeyCode.S) || leftStickY > 0 || mouse1Y < -1f)
         {
-            ShowImage(UIImage2);
-            ShowImage(l2);
-            float time = leftBtnTime + Time.deltaTime * BtnChangeSpeed;
-            time = Mathf.Clamp(time, 0, MaxBtnTime);
-            leftBtnTime = time;
+            ShowImage(UIImage2); ShowImage(l2);
+            leftBtnTime = Mathf.Clamp(leftBtnTime + Time.deltaTime * BtnChangeSpeed, 0, MaxBtnTime);
             leftBtnIndex = -10;
         }
         else
         {
-            HideImage(UIImage2);
-            HideImage(l2);
+            HideImage(UIImage2); HideImage(l2);
             if (leftBtnIndex <= 1)
-            {
-                float time = leftBtnTime - Time.deltaTime * BtnChangeSpeed;
-                time = Mathf.Clamp(time, 0, MaxBtnTime);
-                leftBtnTime = time;
-            }
+                leftBtnTime = Mathf.Clamp(leftBtnTime - Time.deltaTime * BtnChangeSpeed, 0, MaxBtnTime);
         }
 
         float amount = leftBtnTime / MaxBtnTime;
         GameCenter.Instance.uIManager.SetLeftInputFill(amount, leftBtnIndex);
-        if (amount == 0)
-            leftBtnIndex = 1;
-
+        if (amount == 0) leftBtnIndex = 1;
         return amount;
     }
 
     private float UpdateRightBtn()
     {
-        float rightStickY = Input.GetAxis("RightStickVertical"); // 右摇杆上下
+        float rightStickY = Input.GetAxis("RightStickVertical");
+        float mouse2Y = GetMouseYDirection(1);
 
-        if (Input.GetKey(KeyCode.I) || rightStickY > 0)
+        if (Input.GetKey(KeyCode.I) || rightStickY > 0 || mouse2Y > 1f)
         {
-            if (rightBtnIndex != 10)
-            {
-                rightBtnTime = 0;
-            }
-
+            if (rightBtnIndex != 10) rightBtnTime = 0;
             rightBtnIndex = 10;
         }
 
-        if (Input.GetKey(KeyCode.I) || rightStickY > 0)
+        if (Input.GetKey(KeyCode.I) || rightStickY > 0 || mouse2Y > 1f)
         {
-            ShowImage(UIImage3);
-            ShowImage(l3);
-            float time = rightBtnTime + Time.deltaTime * BtnChangeSpeed;
-            time = Mathf.Clamp(time, 0, MaxBtnTime);
-            rightBtnTime = time;
+            ShowImage(UIImage3); ShowImage(l3);
+            rightBtnTime = Mathf.Clamp(rightBtnTime + Time.deltaTime * BtnChangeSpeed, 0, MaxBtnTime);
         }
         else
         {
-            HideImage(UIImage3);
-            HideImage(l3);
+            HideImage(UIImage3); HideImage(l3);
             if (rightBtnIndex >= 1)
-            {
-                float time = rightBtnTime - Time.deltaTime * BtnChangeSpeed;
-                time = Mathf.Clamp(time, 0, MaxBtnTime);
-                rightBtnTime = time;
-            }
+                rightBtnTime = Mathf.Clamp(rightBtnTime - Time.deltaTime * BtnChangeSpeed, 0, MaxBtnTime);
         }
 
-        if (Input.GetKey(KeyCode.K) || rightStickY < 0)
+        if (Input.GetKey(KeyCode.K) || rightStickY < 0 || mouse2Y < -1f)
         {
-            if (rightBtnIndex != -10)
-            {
-                rightBtnTime = 0;
-            }
-
+            if (rightBtnIndex != -10) rightBtnTime = 0;
             rightBtnIndex = -10;
         }
 
-        if (Input.GetKey(KeyCode.K) || rightStickY < 0)
+        if (Input.GetKey(KeyCode.K) || rightStickY < 0 || mouse2Y < -1f)
         {
-            ShowImage(UIImage4);
-            ShowImage(l4);
-            float time = rightBtnTime + Time.deltaTime * BtnChangeSpeed;
-            time = Mathf.Clamp(time, 0, MaxBtnTime);
-            rightBtnTime = time;
+            ShowImage(UIImage4); ShowImage(l4);
+            rightBtnTime = Mathf.Clamp(rightBtnTime + Time.deltaTime * BtnChangeSpeed, 0, MaxBtnTime);
         }
         else
         {
-            HideImage(UIImage4);
-            HideImage(l4);
+            HideImage(UIImage4); HideImage(l4);
             if (rightBtnIndex <= 1)
-            {
-                float time = rightBtnTime - Time.deltaTime * BtnChangeSpeed;
-                time = Mathf.Clamp(time, 0, MaxBtnTime);
-                rightBtnTime = time;
-            }
+                rightBtnTime = Mathf.Clamp(rightBtnTime - Time.deltaTime * BtnChangeSpeed, 0, MaxBtnTime);
         }
 
         float amount = rightBtnTime / MaxBtnTime;
         GameCenter.Instance.uIManager.SetRightInputFill(amount, rightBtnIndex);
-        if (amount == 0)
-            rightBtnIndex = 1;
-
+        if (amount == 0) rightBtnIndex = 1;
         return amount;
     }
 
     float MapValue(float x)
     {
-        float xMin = 0f; // 输入值的最小值
-        float xMax = 2f; // 输入值的最大值
-        float yMin = minSpeed; // 输出值的最小值
-        float yMax = maxSpeed; // 输出值的最大值
-
-        // 使用线性映射公式计算映射后的值
-        float y = (x - xMin) * (yMax - yMin) / (xMax - xMin) + yMin;
-
-        return y;
+        float xMin = 0f, xMax = 2f, yMin = minSpeed, yMax = maxSpeed;
+        return (x - xMin) * (yMax - yMin) / (xMax - xMin) + yMin;
     }
 
-    void ShowImage(Image image)
-    {
-        if (image != null)
-        {
-            image.gameObject.SetActive(true);
-        }
-    }
-
-    void HideImage(Image image)
-    {
-        if (image != null)
-        {
-            image.gameObject.SetActive(false);
-        }
-    }
+    void ShowImage(Image image) => image?.gameObject.SetActive(true);
+    void HideImage(Image image) => image?.gameObject.SetActive(false);
     #region ----------- Anim ------------------
 
     [Header("Anim")]
